@@ -10,11 +10,20 @@ st.write("# Ola", ['Item 0', 'Item 1'])
 
 df = pd.DataFrame(
      np.random.randn(10, 3),
-     columns=['Preço', 'Taxa de desocupação', 'Taxa inadiplencia',])
+     columns=['Preço', 'Taxa de desocupação', 'Taxa inadimplencia',])
+
+
+opcao = st.sidebar.multiselect("Selecione uma opção", ("Preço","Taxa de Ocupação"))
+st.write(f"Selecionado: {opcao}")
+if len(opcao) > 1:
+     st.line_chart(df)
+     st.bar_chart(df)
+elif "Preço" in opcao:
+     st.line_chart(df)
+elif "Taxa de Ocupação" in opcao:
+     st.bar_chart(df)
 
 st.table(df)
-st.line_chart(df)
-st.bar_chart(df)
 
 if st.button('MEU BOTÃO'):
      st.write('Click')
@@ -41,7 +50,9 @@ for i in range(5):
     num = st.checkbox(f'{i}')
     if num:
         st.markdown(f'this is {i}')
-
+tipo = st.radio("Selecione a opção", ('Sim','Não'), horizontal=True)
+if tipo:
+     st.write(f'Tipo selecionado: {tipo}')
 
 values = st.slider('Intervalo',0.0, 100.0, (25.0, 75.0))
 nome = st.text_input('Nome')
