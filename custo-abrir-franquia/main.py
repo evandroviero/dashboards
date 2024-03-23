@@ -10,7 +10,7 @@ import streamlit as st
 st.title("Previsão Inicial de Custo para Franquia")
 
 @st.cache_data
-def load_data(archive):
+def load_data(archive) -> pd.DataFrame:
     encoding = detect_encoding(archive)
     delimiter = detect_delimiter(filename=archive, encoding=encoding)
     return pd.read_csv(archive, sep=delimiter, encoding=encoding)
