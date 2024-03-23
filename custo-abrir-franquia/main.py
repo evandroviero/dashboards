@@ -1,11 +1,33 @@
-import streamlit as st
+import csv
+import chardet
+
 import pandas as pd
-from sklearn.linear_model import LinearRegression
 import matplotlib.pyplot as plt
+from sklearn.linear_model import LinearRegression
+
+import streamlit as st
 
 st.title("Previsão Inicial de Custo para Franquia")
 
-dados = pd.read_csv("data/slr12.csv", sep=";")
+@st.cache_data
+def load_data(archive):
+    encoding = detect_encoding(archive)
+    delimiter = detect_delimiter(filename=archive, encoding=encoding)
+    return pd.read_csv(archive, sep=delimiter, encoding=encoding)
+
+def detect_delimiter(filename: str, encoding: str) -> str:
+    with open(filename, 'r', encoding=encoding) as file:
+        sample = file.read(1024)
+    sniffer = csv.Sniffer()
+    return sniffer.sniff(sample).delimiter
+
+def detect_encoding(filename: str) -> str:
+    with open(filename, 'rb') as file:
+        raw_data = file.read(1024)
+    result = chardet.detect(raw_data)
+    return result['encoding']
+
+dados = load_data(archive="data/slr12.csv")
 
 X = dados[['FrqAnual']]
 y = dados['CusInic']
